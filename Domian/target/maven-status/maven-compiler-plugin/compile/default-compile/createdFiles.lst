@@ -1,0 +1,15 @@
+Patrones\Portaviones.class
+Patrones\Barco.class
+Patrones\NaveFactory.class
+com\id\domian\Coordenada.class
+com\id\domian\Juego.class
+com\id\domian\Tablero.class
+com\id\domian\Casilla.class
+Patrones\Orientacion.class
+Patrones\Submarino.class
+Patrones\INave.class
+Patrones\EstadoNave.class
+com\id\domian\pruba.class
+Patrones\Crucero.class
+com\id\domian\Disparo.class
+com\id\domian\Jugador.class
