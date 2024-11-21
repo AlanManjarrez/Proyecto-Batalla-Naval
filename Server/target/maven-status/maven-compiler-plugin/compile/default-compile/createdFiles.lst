@@ -1,0 +1,7 @@
+network\EventDispatcher$1.class
+network\EventDispatcher.class
+com\id\server\app.class
+network\ClientHandler.class
+Negocio\JuegoManager.class
+network\ServerEventListener.class
+network\Server.class
