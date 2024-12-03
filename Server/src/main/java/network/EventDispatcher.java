@@ -52,7 +52,7 @@ public class EventDispatcher implements ServerEventListener {
                 if (jugadorUnido) {
                     jugadores.put(clientId, jugador); // Asociar clientId con el Jugador solo si se une al juego
                     LOG.log(Level.INFO, "Jugador unido al juego: " + jugador.getNombre());
-                    Event<?> eventoAceptado = FactoryEvent.createEvent(typeEvents.ConexionExitosa, "Te uniste al juego");
+                    Event<?> eventoAceptado = FactoryEvent.createEvent(typeEvents.ConexionExitosa, jugador);
                     server.sendEventToClient(clientId, eventoAceptado);
                 } else {
                     LOG.log(Level.INFO, "Jugador no pudo unirse al juego: " + jugador.getNombre());

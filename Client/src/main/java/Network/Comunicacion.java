@@ -28,7 +28,7 @@ public class Comunicacion {
     private static final Logger LOG = Logger.getLogger(Comunicacion.class.getName());
     private Socket socket;
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 5000;
+    private static final int SERVER_PORT = 50505;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private volatile boolean connected;
@@ -78,11 +78,10 @@ public class Comunicacion {
 
                 // Convertir el evento si es necesario antes de enviarlo al Controller
                 Object payload = event.getPayload();
-                Object convertedPayload = convertPayload(payload);
-
-                System.out.println(convertedPayload);
-                Event<?> convertedEvent = FactoryEvent.createEvent(event.getType(), payload);
-
+                
+                // Crear un nuevo evento con el payload convertido
+                event = FactoryEvent.createEvent(event.getType(), event.getPayload());
+                
                 Controller.getInstance().manejarEvento(event);
             }
         } catch (IOException | ClassNotFoundException e) {

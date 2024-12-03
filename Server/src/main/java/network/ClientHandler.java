@@ -42,7 +42,7 @@ public class ClientHandler implements Runnable{
     public void run() {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
-            out.flush(); // Es importante llamar a flush inmediatamente después de crear el ObjectOutputStream
+            out.flush(); 
             in = new ObjectInputStream(clientSocket.getInputStream());
 
             while (true) {

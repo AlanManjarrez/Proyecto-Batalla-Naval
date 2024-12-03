@@ -21,7 +21,7 @@ public class FactoryEvent {
             case PartidaLlena:
                 return new PartidaLlenaEvent(type, (String)payload);
             case ConexionExitosa:
-                return new ConexionExitosaEvent(type, (String)payload);
+                return new ConexionExitosaEvent(type, (Jugador)payload);
             default:
                 throw new AssertionError();
         }

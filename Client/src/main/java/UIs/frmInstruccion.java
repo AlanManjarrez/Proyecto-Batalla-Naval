@@ -302,13 +302,11 @@ public class frmInstruccion extends javax.swing.JFrame implements JugadorConecta
     public void actualizarVista(boolean avanzar) {
         if (avanzar) {
             System.out.println("entre");
-            // Si el valor es verdadero, se puede avanzar (por ejemplo, abrir otra ventana)
             JOptionPane.showMessageDialog(this, "Conectado al servidor. Avanzando a la siguiente pantalla...");
-            // Abrir la siguiente vista, por ejemplo, frmTablero
-            new frmTablero().setVisible(true);
-            this.dispose();  // Cerrar la ventana actual
+            
+            new frmTablero(cont,cbColor.getSelectedItem().toString()).setVisible(true);
+            this.dispose();  
         } else {
-            // Si el valor es falso, se muestra un mensaje de error
             JOptionPane.showMessageDialog(this, "No se pudo conectar, la partida está llena o hubo un error.");
         }
     }

@@ -4,6 +4,7 @@
  */
 package UIs;
 
+import Controll.Controller;
 import com.id.dtos_sh.NaveDTO;
 import com.id.dtos_sh.TableroDTO;
 import java.awt.BorderLayout;
@@ -23,14 +24,19 @@ public class frmTablero extends javax.swing.JFrame {
     graphicTableInicio grapi;
     graphicNaves gnav;
     TableroDTO tablero;
+    Controller conto;
+    String color;
 
     /**
      * Creates new form frmTablero
      */
-    public frmTablero() {
+    public frmTablero(Controller conto,String color) {
         initComponents();
+        this.conto=conto;
+        this.color=color;
         agregarNaves();
         llenarTablero();
+        
        
     }
 
@@ -159,7 +165,7 @@ public class frmTablero extends javax.swing.JFrame {
     public void llenarTablero() {
         tablero = new TableroDTO();
         tablero.setTamaño(10);
-        grapi = new graphicTableInicio(tablero,gnav,"Verde");
+        grapi = new graphicTableInicio(tablero,gnav,color);
 
         jTablero.setLayout(new BorderLayout());
         jTablero.add(grapi, BorderLayout.CENTER);
@@ -175,7 +181,7 @@ public class frmTablero extends javax.swing.JFrame {
         List<NaveDTO> naves = graphicNaves.obtenerBarcosPorDefecto();
 
         // Crear el panel para las naves gráficas
-        gnav = new graphicNaves(naves,"Verde");
+        gnav = new graphicNaves(naves,color);
 
         // Configurar el diseño de jBarcos para que sea vertical
         jBarcos.setLayout(new BoxLayout(jBarcos, BoxLayout.Y_AXIS));
@@ -186,26 +192,6 @@ public class frmTablero extends javax.swing.JFrame {
         jBarcos.repaint();
     }
     
-    public static void main(String[] args) {
-        // Establecer la apariencia de la interfaz (opcional)
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmTablero.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
-        // Crear y mostrar la ventana
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmTablero().setVisible(true); // Muestra la ventana de batalla naval
-            }
-        });
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

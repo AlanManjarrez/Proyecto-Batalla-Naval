@@ -5,15 +5,15 @@
 package com.id.events;
 
 import java.io.Serializable;
-
+import com.id.domian.Jugador;
 /**
  *
  * @author JESUS
  */
-public class ConexionExitosaEvent extends Event<String> implements Serializable{
+public class ConexionExitosaEvent extends Event<Jugador> implements Serializable{
     private static final long serialVersionUID = 1L;
     
-    public ConexionExitosaEvent(typeEvents type, String payload) {
+    public ConexionExitosaEvent(typeEvents type, Jugador payload) {
         super(type, payload);
     }
     

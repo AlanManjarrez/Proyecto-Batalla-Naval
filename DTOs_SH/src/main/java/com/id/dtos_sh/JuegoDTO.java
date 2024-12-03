@@ -4,6 +4,7 @@
  */
 package com.id.dtos_sh;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,10 @@ public class JuegoDTO {
         this.jugador1TableroDisparo = jugador1TableroDisparo;
         this.jugador2TableroPrincipal = jugador2TableroPrincipal;
         this.jugador2TableroDisparo = jugador2TableroDisparo;
+    }
+    
+    public JuegoDTO(){
+        this.jugadores = new ArrayList<>(); 
     }
 
     public List<JugadorDTO> getJugadores() {

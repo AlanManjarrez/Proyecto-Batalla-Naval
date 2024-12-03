@@ -17,7 +17,7 @@ public class app {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int port = 5000;
+        int port = 50505;
         int maxClients = 3;
         
         JuegoManager juegoManager = JuegoManager.getInstance(); 
