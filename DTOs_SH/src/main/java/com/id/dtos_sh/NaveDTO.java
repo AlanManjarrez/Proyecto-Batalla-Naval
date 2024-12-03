@@ -24,6 +24,10 @@ public class NaveDTO {
         this.direccion = direccion;
         this.tipo = tipo;
     }
+    
+    public NaveDTO(){
+        
+    }
 
     public int getLongitud() {
         return longitud;
@@ -63,6 +67,14 @@ public class NaveDTO {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Object getIcono() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public String getNombre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

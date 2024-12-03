@@ -20,13 +20,10 @@ public class app {
         int port = 5000;
         int maxClients = 3;
         
-        // Inicializa el JuegoManager (esto podría ser una clase que gestiona los jugadores y las partidas)
-        JuegoManager juegoManager = JuegoManager.getInstance();  // Obtener la instancia del singleton
+        JuegoManager juegoManager = JuegoManager.getInstance(); 
         
-        // Crea el servidor
         Server server = new Server(port, maxClients, juegoManager);
         
-        // Inicia el servidor
         server.startServer();
     }
     

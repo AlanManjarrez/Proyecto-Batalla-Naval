@@ -31,7 +31,7 @@ public class Controller {
         comunicacion = new Comunicacion();
         if (!comunicacion.connect()) {
             LOG.log(Level.SEVERE, "No se pudo conectar al servidor.");
-            // Aquí puedes manejar el error de conexión, por ejemplo, mostrándolo en la interfaz
+           
         } else {
             LOG.log(Level.INFO, "Conexión establecida con el servidor.");
         }

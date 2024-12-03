@@ -4,10 +4,14 @@
  */
 package UIs;
 
+import com.id.dtos_sh.NaveDTO;
 import com.id.dtos_sh.TableroDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,6 +21,7 @@ import javax.swing.BorderFactory;
 public class frmTablero extends javax.swing.JFrame {
 
     graphicTableInicio grapi;
+    graphicNaves gnav;
     TableroDTO tablero;
 
     /**
@@ -24,7 +29,9 @@ public class frmTablero extends javax.swing.JFrame {
      */
     public frmTablero() {
         initComponents();
+        agregarNaves();
         llenarTablero();
+       
     }
 
     /**
@@ -61,6 +68,11 @@ public class frmTablero extends javax.swing.JFrame {
         );
 
         btnListo.setText("Listo");
+        btnListo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jBarcosLayout = new javax.swing.GroupLayout(jBarcos);
         jBarcos.setLayout(jBarcosLayout);
@@ -88,9 +100,9 @@ public class frmTablero extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jTablero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(81, 81, 81)
+                .addGap(82, 82, 82)
                 .addComponent(jBarcos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(54, 54, 54))
+                .addGap(53, 53, 53))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,12 +114,11 @@ public class frmTablero extends javax.swing.JFrame {
                         .addGap(37, 37, 37)
                         .addComponent(jTablero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnListo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBarcos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(121, 121, 121))))
+                        .addComponent(btnListo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jBarcos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -124,10 +135,31 @@ public class frmTablero extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
+        if (gnav.todasLasNavesColocadas()) {
+            // Obtener las posiciones de las naves colocadas
+            List<NaveDTO> navesColocadas = grapi.obtenerNavesConPosiciones();
+
+            // Mostrar las naves colocadas en la consola (puedes manejar esto como necesites)
+            for (NaveDTO nave : navesColocadas) {
+                System.out.println("Nave: " + nave.getTipo());
+                System.out.println("Posición inicial: (" + nave.getCasilla().getCoordenada().getX()
+                                   + ", " + nave.getCasilla().getCoordenada().getY() + ")");
+                System.out.println("Dirección: " + nave.getDireccion());
+                System.out.println("Longitud: " + nave.getLongitud());
+            }
+
+            JOptionPane.showMessageDialog(this, "¡Todas las naves han sido colocadas correctamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Mostrar mensaje de error si faltan naves por colocar
+            JOptionPane.showMessageDialog(this, "Faltan naves por colocar en el tablero.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnListoActionPerformed
+
     public void llenarTablero() {
         tablero = new TableroDTO();
         tablero.setTamaño(10);
-        grapi = new graphicTableInicio(tablero);
+        grapi = new graphicTableInicio(tablero,gnav,"Verde");
 
         jTablero.setLayout(new BorderLayout());
         jTablero.add(grapi, BorderLayout.CENTER);
@@ -137,6 +169,42 @@ public class frmTablero extends javax.swing.JFrame {
 
         jTablero.revalidate();
         jTablero.repaint();
+    }
+    
+    public void agregarNaves() {
+        List<NaveDTO> naves = graphicNaves.obtenerBarcosPorDefecto();
+
+        // Crear el panel para las naves gráficas
+        gnav = new graphicNaves(naves,"Verde");
+
+        // Configurar el diseño de jBarcos para que sea vertical
+        jBarcos.setLayout(new BoxLayout(jBarcos, BoxLayout.Y_AXIS));
+        jBarcos.add(gnav); // Añade el panel de naves al contenedor
+        jBarcos.setBorder(BorderFactory.createTitledBorder("Naves disponibles")); // Agregar borde para visualización
+
+        jBarcos.revalidate();
+        jBarcos.repaint();
+    }
+    
+    public static void main(String[] args) {
+        // Establecer la apariencia de la interfaz (opcional)
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(frmTablero.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        // Crear y mostrar la ventana
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new frmTablero().setVisible(true); // Muestra la ventana de batalla naval
+            }
+        });
     }
 
 
