@@ -5,11 +5,16 @@
 package UIs;
 
 import Controll.Controller;
+import Controll.JugadorConectadoListener;
+import com.id.dtos_sh.CasillaDTO;
+import com.id.dtos_sh.CoordenadaDTO;
 import com.id.dtos_sh.NaveDTO;
 import com.id.dtos_sh.TableroDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -19,7 +24,7 @@ import javax.swing.JOptionPane;
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public class frmTablero extends javax.swing.JFrame {
+public class frmTablero extends javax.swing.JFrame implements JugadorConectadoListener{
 
     graphicTableInicio grapi;
     graphicNaves gnav;
@@ -34,8 +39,12 @@ public class frmTablero extends javax.swing.JFrame {
         initComponents();
         this.conto=conto;
         this.color=color;
-        agregarNaves();
-        llenarTablero();
+        
+        // Registrar el listener
+        this.conto.setJugadorConectadoListener(this);
+
+        // Solicitar las naves al servidor
+        this.conto.solicitarNaves();
         
        
     }
@@ -145,17 +154,11 @@ public class frmTablero extends javax.swing.JFrame {
         if (gnav.todasLasNavesColocadas()) {
             // Obtener las posiciones de las naves colocadas
             List<NaveDTO> navesColocadas = grapi.obtenerNavesConPosiciones();
+            tablero.setNaves(navesColocadas);
 
-            // Mostrar las naves colocadas en la consola (puedes manejar esto como necesites)
-            for (NaveDTO nave : navesColocadas) {
-                System.out.println("Nave: " + nave.getTipo());
-                System.out.println("Posición inicial: (" + nave.getCasilla().getCoordenada().getX()
-                                   + ", " + nave.getCasilla().getCoordenada().getY() + ")");
-                System.out.println("Dirección: " + nave.getDireccion());
-                System.out.println("Longitud: " + nave.getLongitud());
-            }
+            // Enviar el tablero al servidor
+            conto.jugadorListo(tablero);
 
-            JOptionPane.showMessageDialog(this, "¡Todas las naves han sido colocadas correctamente!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
             // Mostrar mensaje de error si faltan naves por colocar
             JOptionPane.showMessageDialog(this, "Faltan naves por colocar en el tablero.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -164,8 +167,23 @@ public class frmTablero extends javax.swing.JFrame {
 
     public void llenarTablero() {
         tablero = new TableroDTO();
-        tablero.setTamaño(10);
-        grapi = new graphicTableInicio(tablero,gnav,color);
+        int tamaño=10;
+        tablero.setTamaño(tamaño);
+        tablero.setDisparos(new ArrayList<>()); // Asegúrate de que la lista de disparos esté inicializada
+
+        CasillaDTO[][] casillas = new CasillaDTO[tamaño][tamaño];
+        for (int i = 0; i < tamaño; i++) {
+            for (int j = 0; j < tamaño; j++) {
+                casillas[i][j] = new CasillaDTO(new CoordenadaDTO(i, j)); // Inicializa cada casilla
+            }
+        }
+        tablero.setCasillas(casillas); 
+         // Asegúrate de que gnav (graphicNaves) se inicialice antes
+        if (gnav == null) {
+            throw new IllegalStateException("El panel de naves (gnav) no está inicializado.");
+        }
+
+        grapi = new graphicTableInicio(tablero, gnav, color);
 
         jTablero.setLayout(new BorderLayout());
         jTablero.add(grapi, BorderLayout.CENTER);
@@ -175,24 +193,9 @@ public class frmTablero extends javax.swing.JFrame {
 
         jTablero.revalidate();
         jTablero.repaint();
+        
     }
     
-    public void agregarNaves() {
-        List<NaveDTO> naves = graphicNaves.obtenerBarcosPorDefecto();
-
-        // Crear el panel para las naves gráficas
-        gnav = new graphicNaves(naves,color);
-
-        // Configurar el diseño de jBarcos para que sea vertical
-        jBarcos.setLayout(new BoxLayout(jBarcos, BoxLayout.Y_AXIS));
-        jBarcos.add(gnav); // Añade el panel de naves al contenedor
-        jBarcos.setBorder(BorderFactory.createTitledBorder("Naves disponibles")); // Agregar borde para visualización
-
-        jBarcos.revalidate();
-        jBarcos.repaint();
-    }
-    
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnListo;
@@ -201,4 +204,31 @@ public class frmTablero extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jTablero;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actualizarVista(boolean avanzar) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void actualizarNaves(List<NaveDTO> naves) {
+       if (gnav == null) {
+            // Inicializa graphicNaves si no está ya inicializado
+            gnav = new graphicNaves(naves, color);
+            jBarcos.removeAll();
+            jBarcos.setLayout(new BoxLayout(jBarcos, BoxLayout.Y_AXIS));
+            jBarcos.add(gnav);
+            jBarcos.setBorder(BorderFactory.createTitledBorder("Naves disponibles"));
+            jBarcos.revalidate();
+            jBarcos.repaint();
+        } else {
+            // Actualiza solo las naves en gnav
+            gnav.actualizarNavesDisponibles(naves.get(0)); // Ejemplo de actualización específica
+        }
+
+        if (grapi == null) {
+            // Inicializa el tablero si no está ya inicializado
+            llenarTablero();
+        }
+    }
 }

@@ -4,9 +4,11 @@
  */
 package com.id.events;
 
+import Patrones.INave;
 import com.id.domian.Juego;
 import com.id.domian.Jugador;
-import com.id.domian.pruba;
+import com.id.domian.Tablero;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,20 @@ public class FactoryEvent {
                 return new PartidaLlenaEvent(type, (String)payload);
             case ConexionExitosa:
                 return new ConexionExitosaEvent(type, (Jugador)payload);
+            case solicitudNaves:
+                if (payload == null || payload instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    List<INave> listaNaves = (List<INave>) payload;
+                    return new SolicitudNaves(type, listaNaves);
+                }else{
+                    throw new IllegalArgumentException("Lista desconocidad "+ type);
+                }
+            case JugadorListo:
+                return new JugadorListo(type, (String) payload);
+            case ActualizarTablero:
+                return new TableroActualizado(type, (Tablero) payload);
+            case IniciarPartida:
+                return new IniciarPartida(type, (Juego)payload);
             default:
                 throw new AssertionError();
         }

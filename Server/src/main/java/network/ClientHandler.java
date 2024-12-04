@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.util.logging.Logger;
 import com.id.events.Event;
 import java.io.EOFException;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -31,7 +32,8 @@ public class ClientHandler implements Runnable{
     public ClientHandler(Socket clientSocket, ServerEventListener eventListener) throws IOException {
         this.clientSocket = clientSocket;
         this.eventListener = eventListener;
-        this.clientId = clientSocket.getRemoteSocketAddress().toString();
+        this.clientId = UUID.randomUUID().toString(); // Generar un ID único
+        
     }
 
     public String getClientId() {

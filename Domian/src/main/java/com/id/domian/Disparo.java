@@ -5,14 +5,16 @@
 package com.id.domian;
 
 import Patrones.INave;
+import java.io.Serializable;
 
 /**
  *
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public class Disparo {
-
+public class Disparo implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     private Casilla casilla;
     private Boolean impacto;
     private INave naveImpactada;

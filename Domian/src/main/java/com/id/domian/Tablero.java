@@ -5,6 +5,7 @@
 package com.id.domian;
 
 import Patrones.INave;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,8 +13,9 @@ import java.util.List;
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public class Tablero {
-
+public class Tablero implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     private int tamaño;
     private Casilla[][] casilla;
     private List<INave> naves;

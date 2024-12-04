@@ -215,49 +215,4 @@ public class graphicNaves extends JPanel {
     }
     
     
-    public static List<NaveDTO> obtenerBarcosPorDefecto() {
-        List<NaveDTO> barcos = new ArrayList<>();
-        
-        // Agregando barcos de tipo Destructor
-        NaveDTO barco1 = new NaveDTO();
-        barco1.setLongitud(3);  // Longitud por defecto
-        barco1.setTipo("Destructor");
-        barco1.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco1);
-        
-        NaveDTO barco2 = new NaveDTO();
-        barco2.setLongitud(3);  // Longitud por defecto
-        barco2.setTipo("Destructor");
-        barco2.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco2);
-        
-        // Agregando barcos de tipo Acorazado
-        NaveDTO barco3 = new NaveDTO();
-        barco3.setLongitud(1);  // Longitud por defecto
-        barco3.setTipo("Acorazado");
-        barco3.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco3);
-        
-        NaveDTO barco4 = new NaveDTO();
-        barco4.setLongitud(1);  // Longitud por defecto
-        barco4.setTipo("Acorazado");
-        barco4.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco4);
-        
-        // Agregando barcos de tipo Portaviones
-        NaveDTO barco5 = new NaveDTO();
-        barco5.setLongitud(2);  // Longitud por defecto
-        barco5.setTipo("Portaviones");
-        barco5.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco5);
-        
-        NaveDTO barco6 = new NaveDTO();
-        barco6.setLongitud(2);  // Longitud por defecto
-        barco6.setTipo("Portaviones");
-        barco6.setDireccion(OrientacionDTO.HORIZONTAL);
-        barcos.add(barco6);
-        
-        return barcos;
-    }
-    
 }

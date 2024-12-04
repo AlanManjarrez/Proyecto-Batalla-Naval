@@ -5,16 +5,22 @@
 package Patrones;
 
 import com.id.domian.Casilla;
+import java.io.Serializable;
 
 /**
  *
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public class Crucero extends INave{
-
+public class Crucero extends INave implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     public Crucero( Casilla casillaCabeza, Orientacion direccion) {
         super(3, casillaCabeza, direccion);
+    }
+    
+    public Crucero(){
+        
     }
     
     @Override

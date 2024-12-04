@@ -4,13 +4,16 @@
  */
 package com.id.domian;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public class Coordenada {
-
+public class Coordenada implements Serializable{
+    private static final long serialVersionUID = 1L;
+    
     private int x;
     private int y;
 

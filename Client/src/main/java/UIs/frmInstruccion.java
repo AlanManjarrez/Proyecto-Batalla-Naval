@@ -6,6 +6,7 @@ package UIs;
 
 import Controll.Controller;
 import Controll.JugadorConectadoListener;
+import com.id.dtos_sh.NaveDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -13,6 +14,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -309,5 +311,10 @@ public class frmInstruccion extends javax.swing.JFrame implements JugadorConecta
         } else {
             JOptionPane.showMessageDialog(this, "No se pudo conectar, la partida está llena o hubo un error.");
         }
+    }
+
+    @Override
+    public void actualizarNaves(List<NaveDTO> naves) {
+        
     }
 }

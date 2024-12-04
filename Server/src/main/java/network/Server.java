@@ -58,7 +58,10 @@ public class Server {
     public void sendEventToClient(String clientId, Event<?> event) {
         ClientHandler clientHandler = clients.get(clientId);
         if (clientHandler != null) {
+            LOG.log(Level.INFO, "Enviando evento {0} al cliente {1}", new Object[]{event.getType(), clientId});
             clientHandler.sendEvent(event);
+        } else {
+            LOG.log(Level.WARNING, "No se encontró el cliente con ID: " + clientId);
         }
     }
 

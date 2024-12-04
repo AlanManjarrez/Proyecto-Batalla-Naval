@@ -13,6 +13,8 @@ public enum typeEvents {
     JugadorDesconectado,
     ConexionExitosa,
     
+    solicitudNaves,
+    
     IniciarPartida,
     JugadorListo,
     AsignarTurno,

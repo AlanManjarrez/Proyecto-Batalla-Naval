@@ -4,6 +4,9 @@
  */
 package Controll;
 
+import com.id.dtos_sh.NaveDTO;
+import java.util.List;
+
 /**
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
@@ -11,4 +14,5 @@ package Controll;
 public interface JugadorConectadoListener {
 
     void actualizarVista(boolean avanzar);
+    void actualizarNaves(List<NaveDTO> naves);
 }

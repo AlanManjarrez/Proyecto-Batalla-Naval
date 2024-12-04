@@ -6,6 +6,7 @@ package com.id.dtos_sh;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  *
@@ -13,7 +14,9 @@ import java.util.List;
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
 public class JuegoDTO {
-
+    
+    private List<Observer> observers = new ArrayList<>();
+    
     private List<JugadorDTO> jugadores;
     private JugadorDTO jugadorTurno;
     private int timepoLimite;
@@ -34,6 +37,8 @@ public class JuegoDTO {
     
     public JuegoDTO(){
         this.jugadores = new ArrayList<>(); 
+        this.jugador1TableroPrincipal = null;
+        this.jugador2TableroPrincipal = null;
     }
 
     public List<JugadorDTO> getJugadores() {
@@ -66,6 +71,7 @@ public class JuegoDTO {
 
     public void setJugador1TableroPrincipal(TableroDTO jugador1TableroPrincipal) {
         this.jugador1TableroPrincipal = jugador1TableroPrincipal;
+        notifyObservers();
     }
 
     public TableroDTO getJugador1TableroDisparo() {
@@ -82,6 +88,7 @@ public class JuegoDTO {
 
     public void setJugador2TableroPrincipal(TableroDTO jugador2TableroPrincipal) {
         this.jugador2TableroPrincipal = jugador2TableroPrincipal;
+        notifyObservers(); 
     }
 
     public TableroDTO getJugador2TableroDisparo() {
@@ -91,5 +98,33 @@ public class JuegoDTO {
     public void setJugador2TableroDisparo(TableroDTO jugador2TableroDisparo) {
         this.jugador2TableroDisparo = jugador2TableroDisparo;
     }
+    
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
 
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this); // Notifica a los observadores.
+        }
+    }
+    
+    public List<NaveDTO> getNavesJugador1() {
+    if (jugador1TableroPrincipal != null) {
+        return jugador1TableroPrincipal.getNaves();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<NaveDTO> getNavesJugador2() {
+        if (jugador2TableroPrincipal != null) {
+            return jugador2TableroPrincipal.getNaves();
+        }
+        return new ArrayList<>();
+    }
+    
 }

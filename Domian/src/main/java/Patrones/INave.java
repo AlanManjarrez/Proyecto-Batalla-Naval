@@ -5,13 +5,15 @@
 package Patrones;
 
 import com.id.domian.Casilla;
+import java.io.Serializable;
 
 /**
  *
  * @author Jesus Eduardo Villanueva Godoy 235078
  * @author Jose Alan Manjarrez Ontiveros 228982
  */
-public abstract class INave {
+public abstract class INave implements Serializable{
+    private static final long serialVersionUID = 1L;
     private int longitud;
     private EstadoNave estado;
     private Casilla casillaCabeza;
