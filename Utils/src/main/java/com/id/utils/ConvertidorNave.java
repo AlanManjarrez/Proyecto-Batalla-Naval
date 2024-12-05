@@ -36,13 +36,13 @@ public class ConvertidorNave {
         );
     }
     
-    public static INave toEntity(NaveDTO nave){
-        if (nave == null) {
+    public static INave toEntity(NaveDTO naveDTO){
+        if (naveDTO == null) {
             return null;
         }
-        
+
         INave naved;
-         switch (nave.getTipo().toLowerCase()) {
+        switch (naveDTO.getTipo().toLowerCase()) {
             case "porta aviones":
                 naved = new Portaviones();
                 break;
@@ -56,15 +56,25 @@ public class ConvertidorNave {
                 naved = new Barco();
                 break;
             default:
-                throw new IllegalArgumentException("Tipo de nave desconocido: " + nave.getTipo());
+                throw new IllegalArgumentException("Tipo de nave desconocido: " + naveDTO.getTipo());
         }
-        
-        
-        naved.setLongitud(nave.getLongitud());
-        naved.setCasillaCabeza(ConvertidorCasilla.toEntity(nave.getCasilla()));
-        naved.setEstado(EstadoNave.valueOf(nave.getEstado().name()));
-        naved.setDireccion(Orientacion.valueOf(nave.getDireccion().name()));
-        
+
+        naved.setLongitud(naveDTO.getLongitud());
+        naved.setCasillaCabeza(ConvertidorCasilla.toEntity(naveDTO.getCasilla()));
+
+        // Validar y asignar estado
+        if (naveDTO.getEstado() != null) {
+            naved.setEstado(EstadoNave.valueOf(naveDTO.getEstado().name()));
+        } else {
+            naved.setEstado(EstadoNave.SANO); // Asignar un valor por defecto
+        }
+
+        if (naveDTO.getDireccion() != null) {
+            naved.setDireccion(Orientacion.valueOf(naveDTO.getDireccion().name()));
+        } else {
+            throw new IllegalArgumentException("La dirección de la nave no puede ser nula.");
+        }
+
         return naved;
     }
     

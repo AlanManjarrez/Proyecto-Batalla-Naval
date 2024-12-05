@@ -6,6 +6,8 @@ package com.id.utils;
 
 import com.id.dtos_sh.JugadorDTO;
 import com.id.domian.Jugador;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -29,4 +31,25 @@ public class ConvertidorJugador {
         return new Jugador(jugador.getNombre(), jugador.getColor());
     }
     
+    public static List<JugadorDTO> toDTOList(List<Jugador> jugadores) {
+        if (jugadores == null) {
+            return new ArrayList<>();
+        }
+        List<JugadorDTO> lista = new ArrayList<>();
+        for (Jugador jugador : jugadores) {
+            lista.add(toDTO(jugador));
+        }
+        return lista;
+    }
+
+    public static List<Jugador> toEntityList(List<JugadorDTO> jugadoresDTO) {
+        if (jugadoresDTO == null) {
+            return new ArrayList<>();
+        }
+        List<Jugador> lista = new ArrayList<>();
+        for (JugadorDTO jugadorDTO : jugadoresDTO) {
+            lista.add(toEntity(jugadorDTO));
+        }
+        return lista;
+    }
 }

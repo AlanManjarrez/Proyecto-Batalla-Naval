@@ -21,6 +21,15 @@ public class ConvertidoTablero {
 
         TableroDTO tableroDTO = new TableroDTO();
         tableroDTO.setTamaño(tablero.getTamaño());
+        /*
+        Casilla[][] casillas = tablero.getCasilla();
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                System.out.println("Casillaasdada [" + i + "][" + j + "]: Estado=" + casillas[i][j].isEstado());
+            }
+        }
+        */
+        
         tableroDTO.setCasillas(convertirCasillasATableroDTO(tablero.getCasilla()));
         tableroDTO.setNaves(ConvertidorNave.toDTOList(tablero.getNaves()));
         tableroDTO.setDisparos(ConvertidorDisparos.toDTOList(tablero.getDisparos()));
@@ -34,7 +43,7 @@ public class ConvertidoTablero {
             return null;
         }
 
-        Tablero tablero = null;
+        Tablero tablero = new Tablero();
         tablero.setTamaño(tableroDTO.getTamaño());
         tablero.setCasilla(convertirCasillasATableroEntity(tableroDTO.getCasillas()));
         tablero.setNaves(ConvertidorNave.toEntityList(tableroDTO.getNaves()));
@@ -46,6 +55,7 @@ public class ConvertidoTablero {
     // Métodos auxiliares para convertir las casillas del tablero
     private static CasillaDTO[][] convertirCasillasATableroDTO(Casilla[][] casillas) {
         if (casillas == null) {
+           // System.out.println("Advertencia: Matriz de casillas nula.");
             return null;
         }
 
@@ -54,9 +64,16 @@ public class ConvertidoTablero {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                casillasDTO[i][j] = ConvertidorCasilla.toDTO(casillas[i][j]);
+                if (casillas[i][j] == null) {
+                   // System.out.println("Advertencia: Casilla nula en posición [" + i + "][" + j + "]");
+                    casillasDTO[i][j] = null;
+                } else {
+                    //System.out.println("Convirtiendo casilla [" + i + "][" + j + "] con estado: " + casillas[i][j].isEstado());
+                    casillasDTO[i][j] = ConvertidorCasilla.toDTO(casillas[i][j]);
+                }
             }
         }
+
         return casillasDTO;
     }
 

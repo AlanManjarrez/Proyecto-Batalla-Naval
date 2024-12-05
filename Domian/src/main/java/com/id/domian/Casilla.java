@@ -15,6 +15,7 @@ public class Casilla implements Serializable{
     private static final long serialVersionUID = 1L;
     
     private Coordenada cordenada;
+    private boolean estado;
 
     public Casilla() {
     }
@@ -30,5 +31,15 @@ public class Casilla implements Serializable{
     public void setCordenada(Coordenada cordenada) {
         this.cordenada = cordenada;
     }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
+    
 
 }

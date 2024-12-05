@@ -4,9 +4,11 @@
  */
 package com.id.dtos_sh;
 
+import java.lang.System.Logger.Level;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,7 +18,7 @@ import java.util.Observable;
 public class JuegoDTO {
     
     private List<Observer> observers = new ArrayList<>();
-    
+    private static JuegoDTO instance;
     private List<JugadorDTO> jugadores;
     private JugadorDTO jugadorTurno;
     private int timepoLimite;
@@ -25,7 +27,7 @@ public class JuegoDTO {
     private TableroDTO jugador2TableroPrincipal;
     private TableroDTO jugador2TableroDisparo;
 
-    public JuegoDTO(List<JugadorDTO> jugadores, JugadorDTO jugadorTurno, int timepoLimite, TableroDTO jugador1TableroPrincipal, TableroDTO jugador1TableroDisparo, TableroDTO jugador2TableroPrincipal, TableroDTO jugador2TableroDisparo) {
+    private JuegoDTO(List<JugadorDTO> jugadores, JugadorDTO jugadorTurno, int timepoLimite, TableroDTO jugador1TableroPrincipal, TableroDTO jugador1TableroDisparo, TableroDTO jugador2TableroPrincipal, TableroDTO jugador2TableroDisparo) {
         this.jugadores = jugadores;
         this.jugadorTurno = jugadorTurno;
         this.timepoLimite = timepoLimite;
@@ -35,10 +37,18 @@ public class JuegoDTO {
         this.jugador2TableroDisparo = jugador2TableroDisparo;
     }
     
-    public JuegoDTO(){
-        this.jugadores = new ArrayList<>(); 
+     private JuegoDTO() {
+        this.jugadores = new ArrayList<>();
         this.jugador1TableroPrincipal = null;
         this.jugador2TableroPrincipal = null;
+    }
+
+    // Método estático para obtener la única instancia
+    public static synchronized JuegoDTO getInstance() {
+        if (instance == null) {
+            instance = new JuegoDTO();
+        }
+        return instance;
     }
 
     public List<JugadorDTO> getJugadores() {
@@ -100,7 +110,13 @@ public class JuegoDTO {
     }
     
     public void addObserver(Observer observer) {
-        observers.add(observer);
+         if (!observers.contains(observer)) { // Asegúrate de no agregar duplicados
+            observers.add(observer);
+            System.out.println("Observador agregado: " + observer.getClass().getName());
+            System.out.println("Total de observadores: " + observers.size());
+        } else {
+            System.out.println("El observador ya estaba registrado.");
+        }
     }
 
     public void removeObserver(Observer observer) {
@@ -108,23 +124,18 @@ public class JuegoDTO {
     }
 
     public void notifyObservers() {
+        System.out.println("Notificando a " + observers.size() + " observadores.");
+        System.out.println("Modelo actual en notifyObservers: " + this);
         for (Observer observer : observers) {
+            System.out.println("Notificando a observador: " + observer.getClass().getName());
             observer.update(this); // Notifica a los observadores.
         }
     }
     
-    public List<NaveDTO> getNavesJugador1() {
-    if (jugador1TableroPrincipal != null) {
-        return jugador1TableroPrincipal.getNaves();
-        }
-        return new ArrayList<>();
+    public List<Observer> getObservers() {
+        System.out.println("Observer enviado"+observers.size());
+        return new ArrayList<>(observers);
     }
-
-    public List<NaveDTO> getNavesJugador2() {
-        if (jugador2TableroPrincipal != null) {
-            return jugador2TableroPrincipal.getNaves();
-        }
-        return new ArrayList<>();
-    }
+    
     
 }

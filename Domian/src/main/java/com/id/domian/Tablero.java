@@ -23,9 +23,19 @@ public class Tablero implements Serializable{
 
     public Tablero(int tamaño, Casilla[][] casilla, List<INave> naves) {
         this.tamaño = tamaño;
-        this.casilla = casilla;
+        this.casilla = new Casilla[tamaño][tamaño];
+        for (int i = 0; i < tamaño; i++) {
+            for (int j = 0; j < tamaño; j++) {
+                this.casilla[i][j] = new Casilla(new Coordenada(i, j));
+                this.casilla[i][j].setEstado(false); 
+            }
+        }
         this.naves = naves;
         this.disparos = null;
+    }
+    
+    public Tablero(){
+        
     }
 
     public int getTamaño() {

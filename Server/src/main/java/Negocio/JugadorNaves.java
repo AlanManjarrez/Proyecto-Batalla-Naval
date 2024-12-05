@@ -16,7 +16,7 @@ import java.util.List;
  * @author JESUS
  */
 public class JugadorNaves {
-     private final ConfiguracionNaves configuracion;
+    private final ConfiguracionNaves configuracion;
     private int contadorPortaAviones = 0;
     private int contadorCruceros = 0;
     private int contadorSubmarinos = 0;

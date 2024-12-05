@@ -20,6 +20,10 @@ public class DisparoDTO {
         this.impacto = false;
         this.nave = null;
     }
+    
+    public DisparoDTO(){
+        
+    }
 
     public CasillaDTO getCasilla() {
         return casilla;

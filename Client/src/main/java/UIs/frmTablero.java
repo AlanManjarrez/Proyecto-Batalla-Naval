@@ -8,6 +8,7 @@ import Controll.Controller;
 import Controll.JugadorConectadoListener;
 import com.id.dtos_sh.CasillaDTO;
 import com.id.dtos_sh.CoordenadaDTO;
+import com.id.dtos_sh.JuegoDTO;
 import com.id.dtos_sh.NaveDTO;
 import com.id.dtos_sh.TableroDTO;
 import java.awt.BorderLayout;
@@ -152,15 +153,19 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         if (gnav.todasLasNavesColocadas()) {
-            // Obtener las posiciones de las naves colocadas
+            
             List<NaveDTO> navesColocadas = grapi.obtenerNavesConPosiciones();
             tablero.setNaves(navesColocadas);
 
-            // Enviar el tablero al servidor
-            conto.jugadorListo(tablero);
+            if (tablero != null && tablero.getTamaño() > 0 && tablero.getCasillas() != null) {
+                conto.jugadorListo(tablero);
+                btnListo.setEnabled(false);
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "El tablero no está correctamente inicializado", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
         } else {
-            // Mostrar mensaje de error si faltan naves por colocar
             JOptionPane.showMessageDialog(this, "Faltan naves por colocar en el tablero.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnListoActionPerformed
@@ -169,16 +174,16 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
         tablero = new TableroDTO();
         int tamaño=10;
         tablero.setTamaño(tamaño);
-        tablero.setDisparos(new ArrayList<>()); // Asegúrate de que la lista de disparos esté inicializada
+        tablero.setDisparos(new ArrayList<>()); 
 
         CasillaDTO[][] casillas = new CasillaDTO[tamaño][tamaño];
         for (int i = 0; i < tamaño; i++) {
             for (int j = 0; j < tamaño; j++) {
-                casillas[i][j] = new CasillaDTO(new CoordenadaDTO(i, j)); // Inicializa cada casilla
+                casillas[i][j] = new CasillaDTO(new CoordenadaDTO(i, j));
+                casillas[i][j].setEstado(false); 
             }
         }
         tablero.setCasillas(casillas); 
-         // Asegúrate de que gnav (graphicNaves) se inicialice antes
         if (gnav == null) {
             throw new IllegalStateException("El panel de naves (gnav) no está inicializado.");
         }
@@ -213,7 +218,7 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
     @Override
     public void actualizarNaves(List<NaveDTO> naves) {
        if (gnav == null) {
-            // Inicializa graphicNaves si no está ya inicializado
+            
             gnav = new graphicNaves(naves, color);
             jBarcos.removeAll();
             jBarcos.setLayout(new BoxLayout(jBarcos, BoxLayout.Y_AXIS));
@@ -222,13 +227,21 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
             jBarcos.revalidate();
             jBarcos.repaint();
         } else {
-            // Actualiza solo las naves en gnav
-            gnav.actualizarNavesDisponibles(naves.get(0)); // Ejemplo de actualización específica
+            
+            gnav.actualizarNavesDisponibles(naves.get(0)); 
         }
 
         if (grapi == null) {
-            // Inicializa el tablero si no está ya inicializado
             llenarTablero();
         }
+    }
+
+    @Override
+    public void iniciarPartida(JuegoDTO modelo, boolean jugador) {
+        frmJuego juegoFrame = new frmJuego(conto, jugador);
+        juegoFrame.setVisible(true);
+
+        // Cerrar el frame actual
+        this.dispose();
     }
 }

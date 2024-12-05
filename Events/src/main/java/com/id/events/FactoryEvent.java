@@ -5,6 +5,7 @@
 package com.id.events;
 
 import Patrones.INave;
+import com.id.domian.Disparo;
 import com.id.domian.Juego;
 import com.id.domian.Jugador;
 import com.id.domian.Tablero;
@@ -38,6 +39,10 @@ public class FactoryEvent {
                 return new TableroActualizado(type, (Tablero) payload);
             case IniciarPartida:
                 return new IniciarPartida(type, (Juego)payload);
+            case DisparoRealizado:
+                return new DisparoRealizado(type, (Disparo)payload);
+            case ActualizarJuego:
+                return new ActualizaJuego(type, (Juego)payload);
             default:
                 throw new AssertionError();
         }

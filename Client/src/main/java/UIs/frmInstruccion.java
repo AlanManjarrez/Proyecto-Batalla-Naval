@@ -6,6 +6,7 @@ package UIs;
 
 import Controll.Controller;
 import Controll.JugadorConectadoListener;
+import com.id.dtos_sh.JuegoDTO;
 import com.id.dtos_sh.NaveDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -316,5 +317,10 @@ public class frmInstruccion extends javax.swing.JFrame implements JugadorConecta
     @Override
     public void actualizarNaves(List<NaveDTO> naves) {
         
+    }
+
+    @Override
+    public void iniciarPartida(JuegoDTO modelo, boolean jugador) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

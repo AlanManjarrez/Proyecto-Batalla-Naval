@@ -7,14 +7,18 @@ package network;
 import Negocio.JuegoManager;
 import Patrones.INave;
 import com.id.domian.ConfiguracionNaves;
+import com.id.domian.Disparo;
 import com.id.domian.Juego;
 import com.id.domian.Jugador;
 import com.id.domian.Tablero;
 import com.id.events.Event;
 import com.id.events.FactoryEvent;
 import com.id.events.typeEvents;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -112,8 +116,64 @@ public class EventDispatcher implements ServerEventListener {
                     LOG.log(Level.WARNING, "El tablero recibido está vacío o el jugador no está asociado.");
                 }
                 break;
+            case DisparoRealizado:
+                LOG.log(Level.INFO,"Disparo recibido de :"+clientId);
+                
+                Disparo disparo = (Disparo) event.getPayload();
+                Jugador jugadorDisparador = jugadores.get(clientId);
+                
+                if (disparo != null && jugadorDisparador != null) {
+                    LOG.log(Level.INFO, "Disparo recibido en posición: " + disparo.getCasilla().getCordenada());
+
+                    // Procesar el disparo en el juego
+                    boolean turnoCambiado = juegoManager.procesarDisparo(jugadorDisparador, disparo);
+
+                    // Obtener el estado actualizado del juego
+                    Juego estadoActualizado = juegoManager.getEstadoDelJuego();
+                            
+                    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                         ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+                        oos.writeObject(estadoActualizado);
+                        oos.flush();
+                        byte[] serializedData = bos.toByteArray();
+                        LOG.log(Level.INFO, "Bytes serializados: " + Arrays.toString(serializedData));
+                    } catch (IOException e) {
+                        LOG.log(Level.SEVERE, "Error al serializar el estado del juego", e);
+                    }
+                    
+                    /*
+                    Tablero tableroJugador1 = estadoActualizado.getJugador1TableroPrincipal();
+                    for (int i = 0; i < tableroJugador1.getTamaño(); i++) {
+                        for (int j = 0; j < tableroJugador1.getTamaño(); j++) {
+                            LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador1.getCasilla()[i][j].isEstado());
+                        }
+                    }
+
+                    LOG.log(Level.INFO, "Estado de las casillas del Tablero de Jugador 2 desde el modelo del juego:");
+                    Tablero tableroJugador2 = estadoActualizado.getJugador2TableroPrincipal();
+                    for (int i = 0; i < tableroJugador2.getTamaño(); i++) {
+                        for (int j = 0; j < tableroJugador2.getTamaño(); j++) {
+                            LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador2.getCasilla()[i][j].isEstado());
+                        }
+                    }*/
+
+                    // Enviar el evento de actualización a ambos jugadores
+                    jugadores.forEach((clienteId, jugadore) -> {
+                        Event<?> eventoActualizar = FactoryEvent.createEvent(typeEvents.ActualizarJuego, estadoActualizado);
+                        server.sendEventToClient(clienteId, eventoActualizar);
+                    });
+
+                    if (!turnoCambiado) {
+                        LOG.log(Level.INFO, "El jugador mantiene el turno debido a un impacto.");
+                    } else {
+                        LOG.log(Level.INFO, "Turno cambiado al siguiente jugador.");
+                    }
+                } else {
+                    LOG.log(Level.WARNING, "Disparo o jugador no válido.");
+                }
                 
                 
+                break;
             default:
                 LOG.log(Level.WARNING, "Tipo de evento desconocido: " + event.getType());
         }

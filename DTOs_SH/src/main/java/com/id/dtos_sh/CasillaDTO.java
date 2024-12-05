@@ -12,6 +12,7 @@ package com.id.dtos_sh;
 public class CasillaDTO {
 
     private CoordenadaDTO coordenada;
+    private boolean estado;
 
     public CasillaDTO(CoordenadaDTO coordenada) {
         this.coordenada = coordenada;
@@ -25,4 +26,12 @@ public class CasillaDTO {
         this.coordenada = coordenada;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
 }

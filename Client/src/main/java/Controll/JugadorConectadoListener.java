@@ -4,6 +4,7 @@
  */
 package Controll;
 
+import com.id.dtos_sh.JuegoDTO;
 import com.id.dtos_sh.NaveDTO;
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface JugadorConectadoListener {
 
     void actualizarVista(boolean avanzar);
     void actualizarNaves(List<NaveDTO> naves);
+    void iniciarPartida(JuegoDTO modelo,boolean jugador);
 }

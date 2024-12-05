@@ -19,11 +19,12 @@ public enum typeEvents {
     JugadorListo,
     AsignarTurno,
     
-    DisparoInvalido,
+    
     DisparoRealizado,
     CambioTurno,
     
     ActualizarTablero,
+    ActualizarJuego,
     
     JugadorGano,
     JugadorPerdio,

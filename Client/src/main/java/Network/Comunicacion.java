@@ -58,7 +58,7 @@ public class Comunicacion {
                 Object convertedPayload = convertPayloadToDomain(payload);
 
                 Event<?> domainEvent = FactoryEvent.createEvent(event.getType(), convertedPayload);
-                System.out.println(convertedPayload);
+
                 out.writeObject(domainEvent);
                 out.flush();
                 LOG.log(Level.INFO, "Evento enviado: {0}", event.getType());
@@ -79,7 +79,6 @@ public class Comunicacion {
                 // Convertir el evento si es necesario antes de enviarlo al Controller
                 Object payload = event.getPayload();
                 
-                // Crear un nuevo evento con el payload convertido
                 event = FactoryEvent.createEvent(event.getType(), event.getPayload());
                 
                 Controller.getInstance().manejarEvento(event);

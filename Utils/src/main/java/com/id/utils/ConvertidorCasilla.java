@@ -8,38 +8,48 @@ import com.id.domian.Casilla;
 import com.id.domian.Coordenada;
 import com.id.dtos_sh.CasillaDTO;
 import com.id.dtos_sh.CoordenadaDTO;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author JESUS
  */
 public class ConvertidorCasilla {
-    
-    public static CasillaDTO toDTO(Casilla casilla){
+
+
+    public static CasillaDTO toDTO(Casilla casilla) {
         if (casilla == null) {
             return null;
         }
-        return new CasillaDTO(toDTOC(casilla.getCordenada()));
+
+
+        CasillaDTO casillaDTO = new CasillaDTO(toDTOC(casilla.getCordenada()));
+        casillaDTO.setEstado(casilla.isEstado());
+
+        return casillaDTO;
     }
-    
-    public static Casilla toEntity(CasillaDTO casilla){
-        if (casilla == null) {
+
+    public static Casilla toEntity(CasillaDTO casillaDTO) {
+        if (casillaDTO == null) {
             return null;
         }
-        return new Casilla(toEntityC(casilla.getCoordenada()));
+        Casilla casilla = new Casilla(toEntityC(casillaDTO.getCoordenada()));
+        casilla.setEstado(casillaDTO.isEstado()); 
+        return casilla;
     }
-    
-    public static CoordenadaDTO toDTOC(Coordenada coordenada){
+
+    public static CoordenadaDTO toDTOC(Coordenada coordenada) {
         if (coordenada == null) {
             return null;
         }
         return new CoordenadaDTO(coordenada.getX(), coordenada.getY());
     }
-    
-    public static Coordenada toEntityC(CoordenadaDTO coordenada){
-        if (coordenada == null) {
+
+    public static Coordenada toEntityC(CoordenadaDTO coordenadaDTO) {
+        if (coordenadaDTO == null) {
             return null;
         }
-        return new Coordenada(coordenada.getX(), coordenada.getY());
+        return new Coordenada(coordenadaDTO.getX(), coordenadaDTO.getY());
     }
 }

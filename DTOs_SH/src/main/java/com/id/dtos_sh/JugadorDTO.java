@@ -4,6 +4,8 @@
  */
 package com.id.dtos_sh;
 
+import java.util.Objects;
+
 /**
  *
  * @author Jesus Eduardo Villanueva Godoy 235078
@@ -33,6 +35,14 @@ public class JugadorDTO {
 
     public void setColor(String color) {
         this.color = color;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        JugadorDTO jugador = (JugadorDTO) obj;
+        return Objects.equals(nombre, jugador.nombre) && Objects.equals(color, jugador.color);
     }
 
 }
