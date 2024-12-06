@@ -125,48 +125,29 @@ public class EventDispatcher implements ServerEventListener {
                 if (disparo != null && jugadorDisparador != null) {
                     LOG.log(Level.INFO, "Disparo recibido en posición: " + disparo.getCasilla().getCordenada());
 
-                    // Procesar el disparo en el juego
-                    boolean turnoCambiado = juegoManager.procesarDisparo(jugadorDisparador, disparo);
+                    // Procesar el disparo y obtener el resultado actualizado
+                    Disparo disparoActualizado = juegoManager.procesarDisparo(jugadorDisparador, disparo);
 
-                    // Obtener el estado actualizado del juego
-                    Juego estadoActualizado = juegoManager.getEstadoDelJuego();
-                            
-                    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                         ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-                        oos.writeObject(estadoActualizado);
-                        oos.flush();
-                        byte[] serializedData = bos.toByteArray();
-                        LOG.log(Level.INFO, "Bytes serializados: " + Arrays.toString(serializedData));
-                    } catch (IOException e) {
-                        LOG.log(Level.SEVERE, "Error al serializar el estado del juego", e);
-                    }
-                    
-                    /*
-                    Tablero tableroJugador1 = estadoActualizado.getJugador1TableroPrincipal();
-                    for (int i = 0; i < tableroJugador1.getTamaño(); i++) {
-                        for (int j = 0; j < tableroJugador1.getTamaño(); j++) {
-                            LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador1.getCasilla()[i][j].isEstado());
+                    // Enviar el disparo actualizado como respuesta al jugador que disparó
+                    Event<?> eventoRespuestaDisparo = FactoryEvent.createEvent(typeEvents.RecibirDisparo, disparoActualizado);
+                    server.sendEventToClient(clientId, eventoRespuestaDisparo);
+
+                    // Enviar el disparo actualizado al oponente
+                    jugadores.forEach((clienteId, jugadorw) -> {
+                        if (!clienteId.equals(clientId)) { // Enviar al oponente
+                            Event<?> eventoDisparoOponente = FactoryEvent.createEvent(typeEvents.RecibirDisparo, disparoActualizado);
+                            server.sendEventToClient(clienteId, eventoDisparoOponente);
                         }
-                    }
-
-                    LOG.log(Level.INFO, "Estado de las casillas del Tablero de Jugador 2 desde el modelo del juego:");
-                    Tablero tableroJugador2 = estadoActualizado.getJugador2TableroPrincipal();
-                    for (int i = 0; i < tableroJugador2.getTamaño(); i++) {
-                        for (int j = 0; j < tableroJugador2.getTamaño(); j++) {
-                            LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador2.getCasilla()[i][j].isEstado());
-                        }
-                    }*/
-
-                    // Enviar el evento de actualización a ambos jugadores
-                    jugadores.forEach((clienteId, jugadore) -> {
-                        Event<?> eventoActualizar = FactoryEvent.createEvent(typeEvents.ActualizarJuego, estadoActualizado);
-                        server.sendEventToClient(clienteId, eventoActualizar);
                     });
 
-                    if (!turnoCambiado) {
-                        LOG.log(Level.INFO, "El jugador mantiene el turno debido a un impacto.");
+                    // Log del resultado
+                    if (disparoActualizado.getImpacto()) {
+                        LOG.log(Level.INFO, "Impacto confirmado. Nave impactada: " 
+                            + (disparoActualizado.getNaveImpactada() != null 
+                               ? disparoActualizado.getNaveImpactada().getTipo() 
+                               : "Sin información de nave"));
                     } else {
-                        LOG.log(Level.INFO, "Turno cambiado al siguiente jugador.");
+                        LOG.log(Level.INFO, "Disparo sin impacto. Turno cambiado al siguiente jugador.");
                     }
                 } else {
                     LOG.log(Level.WARNING, "Disparo o jugador no válido.");

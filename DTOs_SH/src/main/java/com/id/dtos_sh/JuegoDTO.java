@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class JuegoDTO {
     
     private List<Observer> observers = new ArrayList<>();
+    
     private static JuegoDTO instance;
     private List<JugadorDTO> jugadores;
     private JugadorDTO jugadorTurno;

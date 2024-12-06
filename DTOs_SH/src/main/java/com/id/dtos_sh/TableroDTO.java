@@ -59,5 +59,12 @@ public class TableroDTO {
     public void setDisparos(List<DisparoDTO> disparos) {
         this.disparos = disparos;
     }
+    
+    public CasillaDTO getCasilla(int fila, int columna) {
+        if (casillas != null && fila >= 0 && columna >= 0 && fila < tamaño && columna < tamaño) {
+            return casillas[fila][columna];
+        }
+        return null; // Retorna null si las coordenadas están fuera de los límites
+    }
 
 }

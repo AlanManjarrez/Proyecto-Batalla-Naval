@@ -130,65 +130,40 @@ public class Controller {
             if (listener != null) {
                 listener.iniciarPartida(modelo, esJugador1);
             }            
-        }else if (evento.getType().equals(typeEvents.ActualizarJuego)) {
+        }else if (evento.getType().equals(typeEvents.RecibirDisparo)) {
             
-                Juego juegoActualizado = (Juego) evento.getPayload();
-
-                System.out.println("Estado del tablero recibido en el cliente:");
-                Tablero tableroJugador1 = juegoActualizado.getJugador1TableroPrincipal();
-                Casilla[][] casillas = tableroJugador1.getCasilla();
-                for (int i = 0; i < casillas.length; i++) {
-                    for (int j = 0; j < casillas[i].length; j++) {
-                        System.out.println("Casilla [" + i + "][" + j + "]: Estado=" + casillas[i][j].isEstado());
-                    }
-                }
-                
-                Tablero tableroJuegor2 = juegoActualizado.getJugador2TableroPrincipal();
-                Casilla[][] casillas2=tableroJuegor2.getCasilla();
-                for (int i = 0; i < casillas2.length; i++) {
-                    for (int j = 0; j < casillas2.length; j++) {
-                        System.out.println("Casilla [" + i + "][" + j + "]: Estado=" + casillas2[i][j].isEstado());
-                    }
-                }
-                
-                
-                /*
-                this.modelo.setJugadores(juegoActualizado.getJugadores());
-                this.modelo.setJugadorTurno(juegoActualizado.getJugadorTurno());
-                this.modelo.setJugador1TableroPrincipal(juegoActualizado.getJugador1TableroPrincipal());
-                this.modelo.setJugador2TableroPrincipal(juegoActualizado.getJugador2TableroPrincipal());
-
-                TableroDTO jugador1Tablero = juegoActualizado.getJugador1TableroPrincipal();
-                if (jugador1Tablero != null) {
-                    System.out.println("Estado de las casillas del Tablero de Jugador 1:");
-                    CasillaDTO[][] casillasJugador1 = jugador1Tablero.getCasillas();
-                    for (int i = 0; i < casillasJugador1.length; i++) {
-                        for (int j = 0; j < casillasJugador1[i].length; j++) {
-                            System.out.println("Casilla [" + i + "][" + j + "]: Estado=" + casillasJugador1[i][j].isEstado());
-                        }
-                    }
-                }
-
-                // Imprimir las casillas del tablero del jugador 2
-                TableroDTO jugador2Tablero = juegoActualizado.getJugador2TableroPrincipal();
-                if (jugador2Tablero != null) {
-                    System.out.println("Estado de las casillas del Tablero de Jugador 2:");
-                    CasillaDTO[][] casillasJugador2 = jugador2Tablero.getCasillas();
-                    for (int i = 0; i < casillasJugador2.length; i++) {
-                        for (int j = 0; j < casillasJugador2[i].length; j++) {
-                            System.out.println("Casilla [" + i + "][" + j + "]: Estado=" + casillasJugador2[i][j].isEstado());
-                        }
-                    }
-                }
-
-
-
-                this.modelo.notifyObservers();
-                LOG.log(Level.INFO, "Modelo actualizado y notificación enviada a los observadores.");
-                System.out.println("Observadores actuales en modelo: " + this.modelo.getObservers().size());
-                // Notifica a los observadores del cambio
-               */
+            if (payload == null) {
+                LOG.log(Level.SEVERE, "Payload del evento RecibirDisparo es nulo.");
+                return;
+            }
             
+            if (payload instanceof DisparoDTO) {
+                DisparoDTO disparoRecibido = (DisparoDTO) payload;
+
+                System.out.println("Disparo recibido: Coordenadas X=" + disparoRecibido.getCasilla().getCoordenada().getX() +
+                               " Y=" + disparoRecibido.getCasilla().getCoordenada().getY());
+
+                boolean esJugador1 = modelo.getJugadores().get(0).equals(jugadorActual);
+                TableroDTO tableroObjetivo = esJugador1
+                    ? modelo.getJugador2TableroPrincipal()
+                    : modelo.getJugador1TableroPrincipal();
+
+                if (tableroObjetivo != null) {
+                    CasillaDTO casillaImpactada = tableroObjetivo.getCasilla(
+                        disparoRecibido.getCasilla().getCoordenada().getX(),
+                        disparoRecibido.getCasilla().getCoordenada().getY()
+                    );
+
+                    if (casillaImpactada != null) {
+                        casillaImpactada.setEstado(true); // Marca como disparada
+                        System.out.println("Casilla impactada marcada como disparada en el tablero.");
+                    } else {
+                        System.out.println("Error: La casilla impactada no se encontró en el tablero objetivo.");
+                    }
+
+                    modelo.notifyObservers();
+                }  
+            }
         }
 
     }

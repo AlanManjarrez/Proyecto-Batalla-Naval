@@ -55,7 +55,7 @@ public class TableroSelector extends JPanel{
 
         for (int fila = 0; fila < size; fila++) {
             for (int columna = 0; columna < size; columna++) {
-                CasillaDTO casilla = casillas[fila][columna];
+                CasillaDTO casilla = casillas[columna][fila];
                 //System.out.println("Casilla [" + fila + "][" + columna + "]: Estado=" + casilla.isEstado());
                 g.setColor(casilla.isEstado() ? Color.RED : Color.BLUE);
                 g.fillRect(columna * cellSize, fila * cellSize, cellSize, cellSize);
@@ -70,13 +70,17 @@ public class TableroSelector extends JPanel{
     }
 
     private void manejarClick(Point puntoClick) {
-        int fila = puntoClick.y / cellSize;
-        int columna = puntoClick.x / cellSize;
+    int fila = puntoClick.y / cellSize; // Calcula la fila basada en Y
+        int columna = puntoClick.x / cellSize; // Calcula la columna basada en X
 
         // Validar que el clic esté dentro del rango del tablero
         if (fila >= 0 && fila < tableroDTO.getTamaño() && columna >= 0 && columna < tableroDTO.getTamaño()) {
-            casillaSeleccionada = new Point(columna, fila); // Actualizar la casilla seleccionada
-            repaint(); // Redibujar el tablero para reflejar la selección
+            casillaSeleccionada = new Point(columna, fila); // Almacena la casilla seleccionada como columna (X) y fila (Y)
+
+            // Imprimir coordenadas para depuración
+            System.out.println("Click detectado: Columna (X) = " + casillaSeleccionada.x + ", Fila (Y) = " + casillaSeleccionada.y);
+
+            repaint(); // Redibuja para reflejar la selección
         }
     }
 

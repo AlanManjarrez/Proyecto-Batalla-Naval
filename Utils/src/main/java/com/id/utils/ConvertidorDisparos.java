@@ -20,7 +20,7 @@ public class ConvertidorDisparos {
             return null;
         }
 
-        DisparoDTO Disparo=null;
+        DisparoDTO Disparo=new DisparoDTO();
         Disparo.setCasilla(ConvertidorCasilla.toDTO(disparo.getCasilla()));
         Disparo.setImpacto(disparo.getImpacto());
         Disparo.setNave(ConvertidorNave.toDTO(disparo.getNaveImpactada()));

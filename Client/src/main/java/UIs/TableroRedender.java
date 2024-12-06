@@ -55,12 +55,12 @@ public class TableroRedender extends JPanel{
        
        //System.out.println("Redibujando TableroRedender. Tamaño: " + size);
 
-        for (int fila = 0; fila < size; fila++) {
-            for (int columna = 0; columna < size; columna++) {
-                CasillaDTO casilla = casillas[fila][columna];
-                //System.out.println("Casilla [" + fila + "][" + columna + "]: Estado=" + casilla.isEstado());
-                g.setColor(casilla.isEstado() ? Color.RED : Color.BLUE);
-                g.fillRect(columna * cellSize, fila * cellSize, cellSize, cellSize);
+        for (int y = 0; y < size; y++) { // Y representa las filas
+            for (int x = 0; x < size; x++) { // X representa las columnas
+                CasillaDTO casilla = casillas[x][y]; // Acceder correctamente usando Y como fila y X como columna
+                //System.out.println("Casilla [" + y + "][" + x + "]: Estado=" + casilla.isEstado());
+                g.setColor(casilla.isEstado() ? Color.RED : Color.BLUE); // Cambiar el color según el estado
+                g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize); // Usar X para columnas y Y para filas
             }
         }
 

@@ -9,6 +9,7 @@ import com.id.dtos_sh.CasillaDTO;
 import com.id.dtos_sh.CoordenadaDTO;
 import com.id.dtos_sh.DisparoDTO;
 import com.id.dtos_sh.JuegoDTO;
+import com.id.dtos_sh.JugadorDTO;
 import com.id.dtos_sh.Observer;
 import com.id.dtos_sh.TableroDTO;
 import java.awt.BorderLayout;
@@ -136,6 +137,12 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtacarActionPerformed
+        if ((esJugador1 && !juego.getJugadorTurno().equals(juego.getJugadores().get(0))) ||
+            (!esJugador1 && !juego.getJugadorTurno().equals(juego.getJugadores().get(1)))) {
+            JOptionPane.showMessageDialog(this, "No es tu turno.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         Point casillaSeleccionada = tableroDisparo.getCasillaSeleccionada();
 
         if (casillaSeleccionada == null) {
@@ -145,9 +152,9 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
 
         // Crear la CasillaDTO a partir de la selección
         CoordenadaDTO coordenada = new CoordenadaDTO(casillaSeleccionada.x, casillaSeleccionada.y);
-        CasillaDTO casilla = new CasillaDTO(coordenada);
+        System.out.println("Coordenadas enviadas al controlador: X (Columna)=" + coordenada.getX() + ", Y (Fila)=" + coordenada.getY());
 
-        // Crear el DisparoDTO con la casilla seleccionada
+        CasillaDTO casilla = new CasillaDTO(coordenada);
         DisparoDTO disparo = new DisparoDTO(casilla);
 
         // Realizar el ataque utilizando el Controller
@@ -156,8 +163,11 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
         // Reiniciar la selección en el tablero de disparos
         tableroDisparo.clearSeleccion();
 
+        // Pasar el turno al siguiente jugador después del disparo
+        cambiarTurno();
+
         // Notificar al usuario que el disparo fue enviado
-        JOptionPane.showMessageDialog(this, "Disparo enviado correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Disparo enviado correctamente. Turno del siguiente jugador.", "Información", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnAtacarActionPerformed
     private void inicializarTableros() {
         // Tablero del jugador actual
@@ -205,32 +215,53 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
     @Override
     public void update(Object Modelo) {
            if (Modelo instanceof JuegoDTO) {
-            this.juego = (JuegoDTO) Modelo;
+                this.juego = (JuegoDTO) Modelo;
 
-            TableroDTO tableroPrincipal = esJugador1 ? juego.getJugador1TableroPrincipal() : juego.getJugador2TableroPrincipal();
-            TableroDTO tableroEnemigo = esJugador1 ? juego.getJugador2TableroPrincipal() : juego.getJugador1TableroPrincipal();
+                TableroDTO tableroPrincipal = esJugador1 ? juego.getJugador2TableroPrincipal() : juego.getJugador1TableroPrincipal();
+                TableroDTO tableroEnemigo = esJugador1 ? juego.getJugador1TableroPrincipal() : juego.getJugador2TableroPrincipal();
 
-            System.out.println("Tablero propio antes de actualizar: " + tableroPrincipal);
-            System.out.println("Tablero enemigo antes de actualizar: " + tableroEnemigo);
+                // Actualizar el tablero propio si existe
+                if (tableroPrincipal != null) {
+                    tableroPropio.setTableroDTO(tableroPrincipal); // Método para actualizar datos internos del panel
+                    jPanel2.revalidate();
+                    jPanel2.repaint();
+                }
 
-            if (tableroPrincipal != null) {
-                tableroPropio.setTableroDTO(tableroPrincipal); // Actualiza los datos
-            }
+                // Actualizar el tablero enemigo si existe
+                if (tableroEnemigo != null) {
+                    tableroDisparo.setTableroDTO(tableroEnemigo); // Método para actualizar datos internos del panel
+                    jPanel3.revalidate();
+                    jPanel3.repaint();
+                }
 
-            if (tableroEnemigo != null) {
-                tableroDisparo.setTableroDTO(tableroEnemigo); // Actualiza los datos
-            }
+                // Habilitar o deshabilitar el botón según el turno
+                boolean esMiTurno = esJugador1
+                        ? juego.getJugadorTurno().equals(juego.getJugadores().get(0))
+                        : juego.getJugadorTurno().equals(juego.getJugadores().get(1));
 
-            jPanel2.revalidate();
-            jPanel2.repaint();
-            jPanel3.revalidate();
-            jPanel3.repaint();
-
-            System.out.println("Paneles redibujados después de actualizar el modelo.");
+                btnAtacar.setEnabled(esMiTurno);
            }
     }
     
     public Point getCasillaSeleccionada() {
         return tableroDisparo.getCasillaSeleccionada();
     }
+    
+    private void cambiarTurno() {
+        JugadorDTO jugadorTurnoActual = juego.getJugadorTurno();
+
+        if (jugadorTurnoActual.equals(juego.getJugadores().get(0))) {
+            juego.setJugadorTurno(juego.getJugadores().get(1));
+        } else {
+            juego.setJugadorTurno(juego.getJugadores().get(0));
+        }
+
+        // Actualizar la interfaz del botón según el nuevo turno
+        boolean esMiTurno = esJugador1
+                ? juego.getJugadorTurno().equals(juego.getJugadores().get(0))
+                : juego.getJugadorTurno().equals(juego.getJugadores().get(1));
+
+        btnAtacar.setEnabled(esMiTurno);
+    }
+    
 }

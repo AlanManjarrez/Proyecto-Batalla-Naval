@@ -43,6 +43,8 @@ public class FactoryEvent {
                 return new DisparoRealizado(type, (Disparo)payload);
             case ActualizarJuego:
                 return new ActualizaJuego(type, (Juego)payload);
+            case RecibirDisparo:
+                return new RecibirDisparo(type, (Disparo)payload);
             default:
                 throw new AssertionError();
         }

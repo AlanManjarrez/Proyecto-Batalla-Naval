@@ -112,12 +112,12 @@ public class JuegoManager {
     }
     
     
-    public boolean procesarDisparo(Jugador jugador, Disparo disparo) {
-        synchronized (juego) {
+   public Disparo procesarDisparo(Jugador jugador, Disparo disparo) {
+    synchronized (juego) {
             Tablero tableroObjetivo;
             List<INave> navesObjetivo;
 
-
+            // Determinar el tablero objetivo en función del jugador
             if (juego.getJugadores().get(0).equals(jugador)) {
                 tableroObjetivo = juego.getJugador2TableroPrincipal();
                 navesObjetivo = tableroObjetivo.getNaves();
@@ -126,58 +126,47 @@ public class JuegoManager {
                 navesObjetivo = tableroObjetivo.getNaves();
             } else {
                 LOG.log(Level.WARNING, "El jugador no está registrado.");
-                return false;
+                disparo.setImpacto(false);
+                disparo.setNaveImpactada(null);
+                return disparo;
             }
 
-            // Procesar el disparo en el tablero
+            // Procesar el disparo
             Casilla casillaObjetivo = tableroObjetivo.getCasilla()[disparo.getCasilla().getCordenada().getX()]
-                                                        [disparo.getCasilla().getCordenada().getY()];
-            System.out.println("estado"+casillaObjetivo.isEstado());
+                                                    [disparo.getCasilla().getCordenada().getY()];
 
             if (casillaObjetivo.isEstado()) {
-                // Ya fue disparada esta casilla
                 LOG.log(Level.WARNING, "Disparo redundante. Casilla ya atacada.");
-            }
-            casillaObjetivo.setEstado(true);
-            
-            
-            
-            /*
-            LOG.log(Level.INFO, "Estado de las casillas del Tablero de Jugador 1 desde el modelo del juego:");
-            Tablero tableroJugador1 = juego.getJugador1TableroPrincipal();
-            for (int i = 0; i < tableroJugador1.getTamaño(); i++) {
-                for (int j = 0; j < tableroJugador1.getTamaño(); j++) {
-                    LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador1.getCasilla()[i][j].isEstado());
-                }
+                disparo.setImpacto(false);
+                disparo.setNaveImpactada(null);
+                return disparo;
             }
 
-            LOG.log(Level.INFO, "Estado de las casillas del Tablero de Jugador 2 desde el modelo del juego:");
-            Tablero tableroJugador2 = juego.getJugador2TableroPrincipal();
-            for (int i = 0; i < tableroJugador2.getTamaño(); i++) {
-                for (int j = 0; j < tableroJugador2.getTamaño(); j++) {
-                    LOG.log(Level.INFO, "Casilla [" + i + "][" + j + "]: Estado=" + tableroJugador2.getCasilla()[i][j].isEstado());
-                }
-            }*/
-            
-            
-            
-            // Verificar si impacta en una nave
+            casillaObjetivo.setEstado(true);
+
+            // Verificar si impacta una nave
             boolean impacto = false;
+            INave naveImpactada = null;
             for (INave nave : navesObjetivo) {
                 if (verificarImpacto(nave, disparo.getCasilla())) {
                     actualizarEstadoNave(nave, tableroObjetivo);
                     impacto = true;
+                    naveImpactada = nave; // Referenciar la nave impactada
                     LOG.log(Level.INFO, "Impacto confirmado en la nave: " + nave.getTipo());
                     break;
                 }
             }
 
-            // Cambiar turno solo si no hubo impacto
+            // Cambiar el turno solo si no hubo impacto
             if (!impacto) {
                 cambiarTurno();
             }
 
-            return true;
+            // Actualizar el objeto disparo con el resultado
+            disparo.setImpacto(impacto);
+            disparo.setNaveImpactada(naveImpactada);
+
+            return disparo;
         }
     }
     

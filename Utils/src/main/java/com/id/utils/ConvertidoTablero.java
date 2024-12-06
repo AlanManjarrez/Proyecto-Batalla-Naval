@@ -20,16 +20,7 @@ public class ConvertidoTablero {
         }
 
         TableroDTO tableroDTO = new TableroDTO();
-        tableroDTO.setTamaño(tablero.getTamaño());
-        /*
-        Casilla[][] casillas = tablero.getCasilla();
-        for (int i = 0; i < casillas.length; i++) {
-            for (int j = 0; j < casillas[i].length; j++) {
-                System.out.println("Casillaasdada [" + i + "][" + j + "]: Estado=" + casillas[i][j].isEstado());
-            }
-        }
-        */
-        
+        tableroDTO.setTamaño(tablero.getTamaño());        
         tableroDTO.setCasillas(convertirCasillasATableroDTO(tablero.getCasilla()));
         tableroDTO.setNaves(ConvertidorNave.toDTOList(tablero.getNaves()));
         tableroDTO.setDisparos(ConvertidorDisparos.toDTOList(tablero.getDisparos()));
