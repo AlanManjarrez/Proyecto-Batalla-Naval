@@ -217,8 +217,8 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
            if (Modelo instanceof JuegoDTO) {
                 this.juego = (JuegoDTO) Modelo;
 
-                TableroDTO tableroPrincipal = esJugador1 ? juego.getJugador2TableroPrincipal() : juego.getJugador1TableroPrincipal();
-                TableroDTO tableroEnemigo = esJugador1 ? juego.getJugador1TableroPrincipal() : juego.getJugador2TableroPrincipal();
+                TableroDTO tableroPrincipal = esJugador1 ? juego.getJugador1TableroPrincipal() : juego.getJugador2TableroPrincipal();
+                TableroDTO tableroEnemigo = esJugador1 ? juego.getJugador2TableroPrincipal() : juego.getJugador1TableroPrincipal();
 
                 // Actualizar el tablero propio si existe
                 if (tableroPrincipal != null) {
