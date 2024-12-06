@@ -9,7 +9,6 @@ Patrones\Orientacion.class
 Patrones\Submarino.class
 Patrones\INave.class
 Patrones\EstadoNave.class
-com\id\domian\pruba.class
 Patrones\Crucero.class
 com\id\domian\Disparo.class
 com\id\domian\Jugador.class

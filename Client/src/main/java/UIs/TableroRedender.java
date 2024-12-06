@@ -20,18 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
  *
  * @author JESUS
  */
-public class TableroRedender extends JPanel{
-     private TableroDTO tableroDTO;
+public class TableroRedender extends JPanel {
+
+    private TableroDTO tableroDTO;
     private int cellSize;
     private BufferedImage barcoImage; // Imagen base para los barcos
-
-    public TableroRedender(TableroDTO tableroDTO, String colorJugador) {
+    private boolean jugador1;
+    private int contador;
+    public TableroRedender(TableroDTO tableroDTO, String colorJugador, boolean jugador1) {
+        this.jugador1 = jugador1;
+        contador=0;
         this.tableroDTO = copiarTablero(tableroDTO); // Copiar el tablero para evitar referencias compartidas
         this.barcoImage = asignarImagenPorColor(colorJugador); // Cargar la imagen como BufferedImage
     }
@@ -52,9 +57,7 @@ public class TableroRedender extends JPanel{
         cellSize = Math.min(getWidth() / size, getHeight() / size); // Tamaño de cada celda
 
         // Dibujar las casillas
-       
-       //System.out.println("Redibujando TableroRedender. Tamaño: " + size);
-
+        //System.out.println("Redibujando TableroRedender. Tamaño: " + size);
         for (int y = 0; y < size; y++) { // Y representa las filas
             for (int x = 0; x < size; x++) { // X representa las columnas
                 CasillaDTO casilla = casillas[x][y]; // Acceder correctamente usando Y como fila y X como columna
@@ -65,9 +68,22 @@ public class TableroRedender extends JPanel{
         }
 
         // Dibujar las naves
-        Graphics2D g2d = (Graphics2D) g;
-        for (NaveDTO nave : tableroDTO.getNaves()) {
-            dibujarNaveConEstado(g2d, nave);
+        if (jugador1) {
+            Graphics2D g2d = (Graphics2D) g;
+            for (NaveDTO nave : tableroDTO.getNaves()) {
+                dibujarNaveConEstado(g2d, nave);
+            }
+        }
+        for (int y = 0; y < size; y++) { // Y representa las filas
+            for (int x = 0; x < size; x++) { // X representa las columnas
+                int a = 0;
+                CasillaDTO casilla = casillas[x][y]; // Acceder correctamente usando Y como fila y X como columna
+                g.setColor(casilla.isEstado() ? Color.RED : Color.BLUE); // Cambiar el color según el estado
+                if (g.getColor().equals( Color.RED)) {
+                    
+                    g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize); // Usar X para columnas y Y para filas
+                }
+            }
         }
     }
 
@@ -84,7 +100,7 @@ public class TableroRedender extends JPanel{
             int y = fila * cellSize + (esHorizontal ? 0 : i * cellSize);
 
             boolean impactado = tableroDTO.getCasillas()[fila + (esHorizontal ? 0 : i)][columna + (esHorizontal ? i : 0)].isEstado();
-
+            
             if (impactado) {
                 // Si está impactado, marcar de rojo
                 g2d.setColor(Color.RED);

@@ -1,8 +1,14 @@
 C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\typeEvents.java
 C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\Event.java
-C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\FactiryEvent.java
-C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\FactoryEvent.java
-C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\Events.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\IniciarPartida.java
 C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\PartidaLlenaEvent.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\RecibirDisparo.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\DisparoRealizado.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\ActualizaJuego.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\FactoryEvent.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\TableroActualizado.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\Events.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\JugadorListo.java
+C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\SolicitudNaves.java
 C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\JugadorConectadoEvent.java
 C:\Users\JESUS\OneDrive\Documentos\GitHub\Proyecto-Batalla-Naval\Events\src\main\java\com\id\events\ConexionExitosaEvent.java

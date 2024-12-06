@@ -1,10 +1,8 @@
-com\id\events\FactoryEvent.class
 com\id\events\JugadorConectadoEvent.class
-com\id\events\typeEvents.class
 com\id\events\Event.class
 com\id\events\FactoryEvent$1.class
-com\id\events\FactiryEvent$1.class
 com\id\events\PartidaLlenaEvent.class
-com\id\events\FactiryEvent.class
 com\id\events\ConexionExitosaEvent.class
 com\id\events\Events.class
+com\id\events\FactoryEvent.class
+com\id\events\typeEvents.class

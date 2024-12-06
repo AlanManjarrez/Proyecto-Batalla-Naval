@@ -131,55 +131,81 @@ public class JuegoManager {
                 return disparo;
             }
 
-            // Procesar el disparo
+           // Procesar el disparo
+            System.out.println("Procesando disparo en coordenadas: X=" + disparo.getCasilla().getCordenada().getX() + 
+                               " Y=" + disparo.getCasilla().getCordenada().getY());
             Casilla casillaObjetivo = tableroObjetivo.getCasilla()[disparo.getCasilla().getCordenada().getX()]
-                                                    [disparo.getCasilla().getCordenada().getY()];
+                                                        [disparo.getCasilla().getCordenada().getY()];
 
             if (casillaObjetivo.isEstado()) {
-                LOG.log(Level.WARNING, "Disparo redundante. Casilla ya atacada.");
+                System.out.println("La casilla ya fue atacada anteriormente.");
                 disparo.setImpacto(false);
                 disparo.setNaveImpactada(null);
                 return disparo;
             }
 
+            // Marcar la casilla como atacada
             casillaObjetivo.setEstado(true);
+            System.out.println("La casilla se marcó como atacada.");
 
             // Verificar si impacta una nave
             boolean impacto = false;
             INave naveImpactada = null;
             for (INave nave : navesObjetivo) {
                 if (verificarImpacto(nave, disparo.getCasilla())) {
-                    actualizarEstadoNave(nave, tableroObjetivo);
                     impacto = true;
-                    naveImpactada = nave; // Referenciar la nave impactada
-                    LOG.log(Level.INFO, "Impacto confirmado en la nave: " + nave.getTipo());
+                    naveImpactada = nave;
+                    System.out.println("¡Impacto en la nave! Tipo de nave: " + nave.getTipo());
+                    actualizarEstadoNave(nave, tableroObjetivo);
+                    System.out.println("Estado de la nave tras el impacto: " + 
+                                       (nave.getEstado() == EstadoNave.HUNDIDO ? "Hundida" : "Averiada"));
                     break;
                 }
             }
 
             // Cambiar el turno solo si no hubo impacto
             if (!impacto) {
+                System.out.println("El disparo no impactó ninguna nave. Cambiando el turno al siguiente jugador.");
                 cambiarTurno();
+            } else {
+                System.out.println("El turno no cambia porque el disparo impactó una nave.");
+            }
+
+            // Mensaje detallado
+            if (impacto) {
+                String estadoNave = naveImpactada.getEstado() == EstadoNave.HUNDIDO ? "hundida" : "averiada";
+                System.out.println("¡Impacto! La nave "+naveImpactada.getTipo()+"Esta "+ naveImpactada.getEstado());
+            } else {
+                System.out.println("Disparo fallido");
             }
 
             // Actualizar el objeto disparo con el resultado
             disparo.setImpacto(impacto);
             disparo.setNaveImpactada(naveImpactada);
-
+            
             return disparo;
         }
     }
     
     
     private boolean verificarImpacto(INave nave, Casilla disparo) {
-        // Obtener todas las casillas ocupadas por la nave
         List<Casilla> casillasNave = calcularCasillasDeNave(nave);
 
+        System.out.println("Verificando impacto en la nave: Tipo=" + nave.getTipo());
+        System.out.println("Coordenadas del disparo: X=" + disparo.getCordenada().getX() + 
+                           ", Y=" + disparo.getCordenada().getY());
+
         for (Casilla casilla : casillasNave) {
-            if (casilla.getCordenada().equals(disparo.getCordenada())) {
+            System.out.println("Comparando con casilla de la nave: X=" + casilla.getCordenada().getX() +
+                               ", Y=" + casilla.getCordenada().getY());
+            if (casilla.getCordenada().getX() == disparo.getCordenada().getX() &&
+                casilla.getCordenada().getY() == disparo.getCordenada().getY()) {
+                System.out.println("Impacto confirmado.");
                 return true;
             }
         }
+
+        System.out.println("No hubo impacto.");
         return false;
     }
     
@@ -200,12 +226,25 @@ public class JuegoManager {
     private List<Casilla> calcularCasillasDeNave(INave nave) {
         List<Casilla> casillas = new ArrayList<>();
         Casilla casillaCabeza = nave.getCasillaCabeza();
+        System.out.println("Calculando casillas de la nave: Tipo=" + nave.getTipo() +
+                           ", Dirección=" + nave.getDireccion() +
+                           ", Longitud=" + nave.getLongitud());
 
         for (int i = 0; i < nave.getLongitud(); i++) {
             if (nave.getDireccion() == Orientacion.HORIZONTAL) {
-                casillas.add(new Casilla(new Coordenada(casillaCabeza.getCordenada().getX() + i, casillaCabeza.getCordenada().getY())));
+                Casilla casilla = new Casilla(new Coordenada(
+                    casillaCabeza.getCordenada().getX() + i, 
+                    casillaCabeza.getCordenada().getY()));
+                casillas.add(casilla);
+                System.out.println("Casilla agregada: X=" + casilla.getCordenada().getX() +
+                                   ", Y=" + casilla.getCordenada().getY());
             } else {
-                casillas.add(new Casilla(new Coordenada(casillaCabeza.getCordenada().getX(), casillaCabeza.getCordenada().getY() + i)));
+                Casilla casilla = new Casilla(new Coordenada(
+                    casillaCabeza.getCordenada().getX(), 
+                    casillaCabeza.getCordenada().getY() + i));
+                casillas.add(casilla);
+                System.out.println("Casilla agregada: X=" + casilla.getCordenada().getX() +
+                                   ", Y=" + casilla.getCordenada().getY());
             }
         }
         return casillas;
@@ -218,6 +257,32 @@ public class JuegoManager {
             juego.setTurnoJugador(juego.getJugadores().get(0));
         }
     }
+    
+    public boolean jugadorPerdio(Jugador jugador) {
+        Tablero tableroObjetivo;
+
+        // Determinar el tablero correspondiente al jugador
+        if (juego.getJugadores().get(0).equals(jugador)) {
+            tableroObjetivo = juego.getJugador1TableroPrincipal();
+        } else if (juego.getJugadores().get(1).equals(jugador)) {
+            tableroObjetivo = juego.getJugador2TableroPrincipal();
+        } else {
+            System.out.println("El jugador no está registrado en la partida.");
+            return false; // No se puede determinar si perdió si no está en la partida
+        }
+
+        // Verificar si todas las naves están hundidas
+        for (INave nave : tableroObjetivo.getNaves()) {
+            if (nave.getEstado() != EstadoNave.HUNDIDO) {
+                System.out.println("El jugador aún tiene naves en pie: " + nave.getTipo() + " (Estado: " + nave.getEstado() + ")");
+                return false; // Si alguna nave no está hundida, el jugador no ha perdido
+            }
+        }
+
+        System.out.println("El jugador ya no tiene naves. Ha perdido.");
+        return true; // Todas las naves están hundidas
+    }
+    
     
     // Obtener naves para un jugador específico
    public List<INave> obtenerNaves(Jugador jugador) {

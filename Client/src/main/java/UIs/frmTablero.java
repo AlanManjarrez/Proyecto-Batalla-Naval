@@ -40,6 +40,8 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
         initComponents();
         this.conto=conto;
         this.color=color;
+        setResizable(false);
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
         
         // Registrar el listener
         this.conto.setJugadorConectadoListener(this);
@@ -193,8 +195,11 @@ public class frmTablero extends javax.swing.JFrame implements JugadorConectadoLi
         jTablero.setLayout(new BorderLayout());
         jTablero.add(grapi, BorderLayout.CENTER);
 
-        jTablero.setBorder(BorderFactory.createLineBorder(Color.RED));
-        grapi.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+        jTablero.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255))); // Azul para el borde externo
+        grapi.setBorder(BorderFactory.createLineBorder(new Color(255, 69, 0))); // Rojo para las áreas activas
+
+        jTablero.setBackground(new Color(173, 216, 230)); // Azul claro para fondo del tablero
+        grapi.setBackground(new Color(240, 248, 255)); // Blanco para fondo interno
 
         jTablero.revalidate();
         jTablero.repaint();
