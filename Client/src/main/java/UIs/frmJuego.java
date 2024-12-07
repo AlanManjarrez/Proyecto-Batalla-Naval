@@ -253,12 +253,7 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
                     jPanel3.repaint();
                 }
 
-                // Habilitar o deshabilitar el botón según el turno
-                boolean esMiTurno = esJugador1
-                        ? juego.getJugadorTurno().equals(juego.getJugadores().get(0))
-                                : juego.getJugadorTurno().equals(juego.getJugadores().get(1));
-
-                btnAtacar.setEnabled(esMiTurno);
+                
            }
     }
     
@@ -266,21 +261,5 @@ public class frmJuego extends javax.swing.JFrame implements Observer{
         return tableroDisparo.getCasillaSeleccionada();
     }
     
-////    private void cambiarTurno() {
-////        JugadorDTO jugadorTurnoActual = juego.getJugadorTurno();
-////
-////        if (jugadorTurnoActual.equals(juego.getJugadores().get(0))) {
-////            juego.setJugadorTurno(juego.getJugadores().get(1));
-////        } else {
-////            juego.setJugadorTurno(juego.getJugadores().get(0));
-////        }
-////
-////        // Actualizar la interfaz del botón según el nuevo turno
-////        boolean esMiTurno = esJugador1
-////                ? juego.getJugadorTurno().equals(juego.getJugadores().get(0))
-////                : juego.getJugadorTurno().equals(juego.getJugadores().get(1));
-////
-////        btnAtacar.setEnabled(esMiTurno);
-////    }
     
 }

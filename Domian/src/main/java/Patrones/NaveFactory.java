@@ -14,7 +14,7 @@ import com.id.domian.Casilla;
 public class NaveFactory {
 
      public static INave crearNave(String tipo, Casilla casillaCabeza, Orientacion direccion) {
-        if (tipo.equalsIgnoreCase("barco")) {
+        if (tipo.equalsIgnoreCase("barco")) {   
             return new Barco(casillaCabeza, direccion);
         } else if (tipo.equalsIgnoreCase("submarino")) {
             return new Submarino(casillaCabeza, direccion);
